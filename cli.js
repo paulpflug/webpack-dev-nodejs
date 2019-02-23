@@ -6,17 +6,32 @@ for (i = 0, len = args.length; i < len; i++) {
   arg = args[i]
   if (arg[0] == "-") {
     switch (arg) {
+      case '-c':
+      case '--config':
+        options.name = args[++i]
+        break
+      case '-s':
+      case '--stack-limit':
+        options.stackLimit = Number(args[++i])
+        break
       case '-h':
       case '--help':
-        console.log('usage: webpack-dev-nodejs (config file)')
+        console.log('usage: webpack-dev-nodejs <options> (alternative entry)')
         console.log('')
-        console.log('config file is optional and defaults to "webpack.config.[js|json|coffee|ts]"')
+        console.log('options:')
+        console.log('-c, --config (config file)  alternative webpack.config')
+        console.log('-s, --stack-limit (lines)   limit the stack-trace to (lines)')
+        console.log('')
+        console.log('config file defaults to "webpack.config.[js|json|coffee|ts]"')
         console.log('in "build/" and "/"')
+        console.log('alternative entry will replace the entry option in webpack.config')
+        console.log('example:')
+        console.log('webpack-dev-nodejs dev/env.js')
         process.exit()
         break
     }
   } else {
-    options.name = arg
+    options.entry = arg
   }
 }
 var start

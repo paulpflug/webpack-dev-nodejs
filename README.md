@@ -12,17 +12,24 @@ usage of [webpack-node-externals](https://github.com/liady/webpack-node-external
 ## Usage
 direct:
 ```
-usage: webpack-dev-nodejs (config file)
+usage: webpack-dev-nodejs <options> (alternative entry)
 
-config file is optional and defaults to "webpack.config.[js|json|coffee|ts]"
+options:
+-c, --config (config file)  alternative webpack.config
+-s, --stack-limit (lines)   limit the stack-trace to (lines)
+
+config file defaults to "webpack.config.[js|json|coffee|ts]"
 in "build/" and "/"
+alternative entry will replace the entry option in webpack.config
+example:
+webpack-dev-nodejs dev/env.js
 ```
 via npm
 ```json
 # package.json
 {
   "scripts": {
-    "watch": "webpack-dev-nodejs"
+    "watch": "webpack-dev-nodejs --stack-limit 5 ./dev/env.js"
   }
 }
 ```

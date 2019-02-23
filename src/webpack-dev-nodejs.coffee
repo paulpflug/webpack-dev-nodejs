@@ -13,7 +13,9 @@ requireStr = require("require-from-string")
 
 sourceMap = require "source-map"
 oldStackTrace = Error.prepareStackTrace
-module.exports = ({name}) =>
+handleError = (e) => console.error e
+process.on "unhandledRejection", (e) => handleError(e)
+module.exports = ({name, entry, stackLimit}) =>
 
   mfs = new MemoryFS()
   first = true
@@ -29,6 +31,8 @@ module.exports = ({name}) =>
       {webpackConf} = base
       webpackConf.mode = "development"
       webpackConf.devtool = "source-map"
+      if entry?
+        webpackConf.entry = index: entry
       compiler = webpack webpackConf
       compiler.outputFileSystem = mfs
       watcher = compiler.watch webpackConf.watchOptions, (err, stats) =>
@@ -49,6 +53,8 @@ module.exports = ({name}) =>
             getNewStackTrace = (filename) =>
               smc = await new sourceMap.SourceMapConsumer(mfs.readFileSync(filename+".map","utf-8"))
               return (error, stackTrace) =>
+                if stackLimit
+                  stackTrace = stackTrace.slice(0, stackLimit)
                 errLines = stackTrace.map (callSite) =>
                   source = callSite.getFileName()
                   line = callSite.getLineNumber()
@@ -63,13 +69,18 @@ module.exports = ({name}) =>
                 desc = oldStackTrace(error, stackTrace)
                 errLines.unshift desc.slice 0, desc.indexOf("\n")
                 return errLines.join("\n")
-            for asset in info.assets
+            info.assets.forEach (asset) =>
               filename = path.resolve(out,asset.name)
               if filename.match /\.js$/
+                handleError = (e) =>
+                  try
+                    Error.prepareStackTrace = await getNewStackTrace(filename)
+                  catch e2
+                    console.error e2
+                  console.error e.stack
+                  Error.prepareStackTrace = oldStackTrace
                 try
                   requireStr mfs.readFileSync(filename,"utf-8"), filename
                 catch e
-                  Error.prepareStackTrace = await getNewStackTrace(filename)
-                  console.error e.stack
-                  Error.prepareStackTrace = oldStackTrace
+                  handleError(e)
       return null
