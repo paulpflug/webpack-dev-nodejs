@@ -1,0 +1,51 @@
+{
+  "name": "webpack-dev-nodejs",
+  "description": "Run webpacked nodejs apps directly from shell in-memory, with auto-reloading, clever cache invalidation and source-maps.",
+  "version": "0.0.0",
+  "homepage": "https://github.com/paulpflug/",
+  "author": {
+    "name": "Paul Pflugradt",
+    "email": "paul.pflugradt@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/paulpflug/webpack-dev-nodejs"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "main": "webpack-dev-nodejs.js",
+  "files": [
+    "lib/*.js"
+  ],
+  "bin": {
+    "webpack-dev-nodejs": "./cli.js"
+  },
+  "devDependencies": {
+    "coffee-loader": "^0.9.0",
+    "coffeescript": "^2.3.2",
+    "script-runner": "^0.1.8",
+    "snapy": "^0.1.6",
+    "webpack": "^4.29.5"
+  },
+  "keywords": [],
+  "readmeFilename": "README.md",
+  "scripts": {
+    "build": "coffee --bare --no-header --compile --output . src/*.coffee",
+    "test": "snapy",
+    "dev": "node ./cli.js",
+    "preversion": "npm run test",
+    "version": "npm run build && git add .",
+    "postversion": "git push && git push --tags && npm publish"
+  },
+  "dependencies": {
+    "memory-fs": "^0.4.1",
+    "read-conf": "^0.5.2",
+    "require-from-string": "^2.0.2",
+    "source-map": "^0.7.3"
+  },
+  "peerDependencies": {
+    "webpack": "^4.29.5"
+  }
+}
