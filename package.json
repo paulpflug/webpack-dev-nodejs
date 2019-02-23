@@ -1,7 +1,7 @@
 {
   "name": "webpack-dev-nodejs",
   "description": "Run webpacked nodejs apps directly from shell in-memory, with auto-reloading, clever cache invalidation and source-maps.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/paulpflug/",
   "author": {
     "name": "Paul Pflugradt",
