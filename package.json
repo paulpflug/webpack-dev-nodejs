@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "memory-fs": "^0.4.1",
+    "ora": "^3.4.0",
     "read-conf": "^0.5.2",
     "require-from-string": "^2.0.2",
     "source-map": "^0.7.3"

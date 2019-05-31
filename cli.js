@@ -40,9 +40,9 @@ try {
   start = require("./src/webpack-dev-nodejs.coffee")
 } catch (e) {
   if (e.code != "MODULE_NOT_FOUND") {
-    console.log(e)
+    console.log(e.toString())
+    process.exit(1)
   } else {
-    console.log(e)
     start = require("./webpack-dev-nodejs.js")
   }
 }
