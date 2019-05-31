@@ -5,3 +5,4 @@ node_modules
 shrinkwrap.yaml
 yarn.lock
 webpack-dev-nodejs.js
+pnpm-lock.yaml
